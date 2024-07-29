@@ -19,7 +19,7 @@ namespace PedidosAPI.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     NomeCliente = table.Column<string>(type: "TEXT", nullable: false),
                     ValorTotal = table.Column<decimal>(type: "TEXT", nullable: false),
-                    Status = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Fechado = table.Column<bool>(type: "INTEGER", nullable: false),
                     DataPedido = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>

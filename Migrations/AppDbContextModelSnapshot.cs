@@ -50,12 +50,12 @@ namespace PedidosAPI.Migrations
                     b.Property<DateTime>("DataPedido")
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("Fechado")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("NomeCliente")
                         .IsRequired()
                         .HasColumnType("TEXT");
-
-                    b.Property<bool>("Status")
-                        .HasColumnType("INTEGER");
 
                     b.Property<decimal>("ValorTotal")
                         .HasColumnType("TEXT");

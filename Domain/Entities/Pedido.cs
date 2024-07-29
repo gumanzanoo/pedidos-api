@@ -6,7 +6,7 @@ public class Pedido
     public string NomeCliente { get; set; } = string.Empty;
     public ICollection<ItemPedido> ItemsPedido { get; set; } = new List<ItemPedido>();
     public decimal ValorTotal { get; set; }
-    public bool Status { get; set; }
+    public bool Fechado { get; set; }
     public DateTime DataPedido { get; set; } = DateTime.UtcNow;
 
     public void CalcularValorTotal()

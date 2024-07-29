@@ -5,8 +5,8 @@ namespace PedidosAPI.Domain.Interfaces;
 public interface IProdutoRepository
 {
     Task<IEnumerable<Produto>> GetProdutosListAsync();
-    Task<Produto> GetProdutoByIdAsync();
-    Task<Produto> AddProdutoAsync();
+    Task<Produto?> GetProdutoByIdAsync(int id);
+    Task<Produto> AddProdutoAsync(Produto produto);
     Task UpdateProdutoAsync(Produto produto);
     Task DeleteProdutoAsync(int id);
     Task SaveChangesAsync();

@@ -1,27 +1,43 @@
 ﻿using PedidosAPI.Domain.Entities;
 using PedidosAPI.Domain.Interfaces;
+using PedidosAPI.Infraestructure.Data;
 
 namespace PedidosAPI.Infraestructure.Persistence;
 
 public class ItemPedidoRepository : IItemPedidoRepository
 {
-    public Task<ItemPedido> AddItemAsync(ItemPedido itemPedido)
+    private readonly AppDbContext _db;
+
+    public ItemPedidoRepository(AppDbContext db)
     {
-        throw new NotImplementedException();
+        _db = db;
     }
 
-    public Task UpdateItemAsync(ItemPedido itemPedido)
+    public async Task<ItemPedido> AddItemAsync(ItemPedido itemPedido)
     {
-        throw new NotImplementedException();
+        _db.ItemsPedido.Add(itemPedido);
+        await _db.SaveChangesAsync();
+        return itemPedido;
     }
 
-    public Task DeleteItemAsync(int id)
+    public async Task UpdateItemAsync(ItemPedido itemPedido)
     {
-        throw new NotImplementedException();
+        _db.ItemsPedido.Update(itemPedido);
+        await _db.SaveChangesAsync();
     }
 
-    public Task SaveChangesAsync()
+    public async Task DeleteItemAsync(int id)
     {
-        throw new NotImplementedException();
+        var itemPedido = await _db.ItemsPedido.FindAsync(id);
+        if (itemPedido != null)
+        {
+            _db.ItemsPedido.Remove(itemPedido);
+            await _db.SaveChangesAsync();
+        }
+    }
+
+    public async Task SaveChangesAsync()
+    {
+        await _db.SaveChangesAsync();
     }
 }

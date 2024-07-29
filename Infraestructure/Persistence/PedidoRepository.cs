@@ -1,37 +1,60 @@
-﻿using PedidosAPI.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using PedidosAPI.Domain.Entities;
 using PedidosAPI.Domain.Interfaces;
+using PedidosAPI.Infraestructure.Data;
 
 namespace PedidosAPI.Infraestructure.Persistence;
 
 public class PedidoRepository : IPedidoRepository
 {
-    public Task<IEnumerable<Pedido>> GetPedidosListAsync()
+    private readonly AppDbContext _db;
+
+    public PedidoRepository(AppDbContext db)
     {
-        throw new NotImplementedException();
+        _db = db;
     }
 
-    public Task<Pedido?> GetPedidoByIdAsync(int id)
+    public async Task<IEnumerable<Pedido>> GetPedidosListAsync()
     {
-        throw new NotImplementedException();
+        return await _db.Pedidos
+            .Include(p => p.ItemsPedido)
+            .ThenInclude(i => i.Produto)
+            .ToListAsync();
     }
 
-    public Task<Pedido> AddPedidoAsync(Pedido pedido)
+    public async Task<Pedido?> GetPedidoByIdAsync(int id)
     {
-        throw new NotImplementedException();
+        return await _db.Pedidos
+            .Include(p => p.ItemsPedido)
+            .ThenInclude(i => i.Produto)
+            .FirstOrDefaultAsync(p => p.Id == id);
     }
 
-    public Task UpdatePedidoAsync()
+    public async Task<Pedido> AddPedidoAsync(Pedido pedido)
     {
-        throw new NotImplementedException();
+        _db.Pedidos.Add(pedido);
+        await _db.SaveChangesAsync();
+        return pedido;
     }
 
-    public Task DeletePedidoAsync()
+    public async Task UpdatePedidoAsync(Pedido pedido)
     {
-        throw new NotImplementedException();
+        _db.Pedidos.Update(pedido);
+        await _db.SaveChangesAsync();
     }
 
-    public Task SaveChangesAsync()
+    public async Task DeletePedidoAsync(int id)
     {
-        throw new NotImplementedException();
+        var pedido = await _db.Pedidos.FindAsync(id);
+        if (pedido != null)
+        {
+            _db.Pedidos.Remove(pedido);
+            await _db.SaveChangesAsync();
+        }
+    }
+
+    public async Task SaveChangesAsync()
+    {
+        await _db.SaveChangesAsync();
     }
 }

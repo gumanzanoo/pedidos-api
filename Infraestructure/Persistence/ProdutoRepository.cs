@@ -1,37 +1,54 @@
-﻿using PedidosAPI.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using PedidosAPI.Domain.Entities;
 using PedidosAPI.Domain.Interfaces;
+using PedidosAPI.Infraestructure.Data;
 
 namespace PedidosAPI.Infraestructure.Persistence;
 
 public class ProdutoRepository : IProdutoRepository
 {
-    public Task<IEnumerable<Produto>> GetProdutosListAsync()
+    private readonly AppDbContext _db;
+
+    public ProdutoRepository(AppDbContext db)
     {
-        throw new NotImplementedException();
+        _db = db;
+    }
+    
+    public async Task<IEnumerable<Produto>> GetProdutosListAsync()
+    {
+        return await _db.Produtos.ToListAsync();
     }
 
-    public Task<Produto> GetProdutoByIdAsync()
+    public async Task<Produto?> GetProdutoByIdAsync(int id)
     {
-        throw new NotImplementedException();
+        return await _db.Produtos.FindAsync(id);
     }
 
-    public Task<Produto> AddProdutoAsync()
+    public async Task<Produto> AddProdutoAsync(Produto produto)
     {
-        throw new NotImplementedException();
+        _db.Produtos.Add(produto);
+        await _db.SaveChangesAsync();
+        return produto;
     }
 
-    public Task UpdateProdutoAsync(Produto produto)
+    public async Task UpdateProdutoAsync(Produto produto)
     {
-        throw new NotImplementedException();
+        _db.Produtos.Update(produto);
+        await SaveChangesAsync();
     }
 
-    public Task DeleteProdutoAsync(int id)
+    public async Task DeleteProdutoAsync(int id)
     {
-        throw new NotImplementedException();
+        var produto = await _db.Produtos.FindAsync(id);
+        if (produto != null)
+        {
+            _db.Produtos.Remove(produto);
+            await SaveChangesAsync();
+        }
     }
 
-    public Task SaveChangesAsync()
+    public async Task SaveChangesAsync()
     {
-        throw new NotImplementedException();
+        await _db.SaveChangesAsync();
     }
 }

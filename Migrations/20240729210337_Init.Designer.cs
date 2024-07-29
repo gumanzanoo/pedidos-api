@@ -11,7 +11,7 @@ using PedidosAPI.Infraestructure.Data;
 namespace PedidosAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240729194417_Init")]
+    [Migration("20240729210337_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -53,12 +53,12 @@ namespace PedidosAPI.Migrations
                     b.Property<DateTime>("DataPedido")
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("Fechado")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("NomeCliente")
                         .IsRequired()
                         .HasColumnType("TEXT");
-
-                    b.Property<bool>("Status")
-                        .HasColumnType("INTEGER");
 
                     b.Property<decimal>("ValorTotal")
                         .HasColumnType("TEXT");
