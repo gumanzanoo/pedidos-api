@@ -14,9 +14,11 @@ public class ProdutoRepository : IProdutoRepository
         _db = db;
     }
     
-    public async Task<IEnumerable<Produto>> GetProdutosListAsync()
+    public async Task<(IEnumerable<Produto> Produtos, int TotalCount)> GetProdutosListAsync(
+        int pageNumber, int pageSize)
     {
-        return await _db.Produtos.ToListAsync();
+        var queryProdutos = _db.Produtos;
+        return (await queryProdutos.ToListAsync(), await queryProdutos.CountAsync());
     }
 
     public async Task<Produto?> GetProdutoByIdAsync(int id)

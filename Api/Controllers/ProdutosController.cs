@@ -16,9 +16,10 @@ namespace PedidosAPI.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Produto>>> GetProdutos()
+        public async Task<ActionResult<IEnumerable<Produto>>> GetProdutos(
+                [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
-            var produtos = await _produtoService.GetProdutosListAsync();
+            var produtos = await _produtoService.GetProdutosListAsync(pageNumber, pageSize);
             return Ok(produtos);
         }
 

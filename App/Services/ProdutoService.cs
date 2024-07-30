@@ -13,9 +13,10 @@ public class ProdutoService : IProdutoService
         _produtoRepository = produtoRepository;
     }
 
-    public async Task<IEnumerable<Produto>> GetProdutosListAsync()
+    public async Task<(IEnumerable<Produto> Produtos, int TotalCount)> GetProdutosListAsync(
+        int pageNumber, int pageSize)
     {
-        return await _produtoRepository.GetProdutosListAsync();
+        return await _produtoRepository.GetProdutosListAsync(pageNumber, pageSize);
     }
 
     public async Task<Produto?> GetProdutoByIdAsync(int id)

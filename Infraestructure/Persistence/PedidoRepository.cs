@@ -14,17 +14,21 @@ public class PedidoRepository : IPedidoRepository
         _db = db;
     }
 
-    public async Task<IEnumerable<Pedido>> GetPedidosListAsync(bool? status)
+    public async Task<(IEnumerable<Pedido> Pedidos, int TotalCount)> GetPedidosListAsync(
+        bool? status, int pageNumber, int pageSize)
     {
         var queryPedidos = _db.Pedidos.AsQueryable();
         if (status.HasValue)
         {
             queryPedidos = queryPedidos.Where(p => p.Fechado == status);
         }
-        return await queryPedidos
+        
+        return (await queryPedidos
             .Include(p => p.ItemsPedido)
             .ThenInclude(i => i.Produto)
-            .ToListAsync();
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync(), await queryPedidos.CountAsync());
     }
 
     public async Task<Pedido?> GetPedidoByIdAsync(int id)

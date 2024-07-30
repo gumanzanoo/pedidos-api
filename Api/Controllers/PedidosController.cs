@@ -17,11 +17,14 @@ namespace PedidosAPI.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Pedido>>> GetPedidos([FromQuery] bool? status)
+        public async Task<ActionResult<IEnumerable<Pedido>>> GetPedidos(
+            [FromQuery] bool? status, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             try
             {
-                var pedidos = await _pedidoService.GetPedidosListAsync(status);
+                var (pedidos, totalCount) = await _pedidoService.GetPedidosListAsync(
+                    status, pageNumber, pageSize);
+                Response.Headers["X-Total-Count"] = totalCount.ToString();
                 return Ok(pedidos);
             }
             catch (InvalidOperationException ex)

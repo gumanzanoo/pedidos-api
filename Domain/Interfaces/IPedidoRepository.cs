@@ -4,7 +4,7 @@ namespace PedidosAPI.Domain.Interfaces;
 
 public interface IPedidoRepository
 {
-    Task<IEnumerable<Pedido>> GetPedidosListAsync(bool? status);
+    Task<(IEnumerable<Pedido> Pedidos, int TotalCount)> GetPedidosListAsync(bool? status, int pageNumber, int pageSize);
     Task<Pedido?> GetPedidoByIdAsync(int id);
     Task<Pedido> AddPedidoAsync(Pedido pedido);
     Task UpdatePedidoAsync(Pedido pedido);

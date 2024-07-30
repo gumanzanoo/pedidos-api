@@ -15,9 +15,10 @@ public class PedidoService : IPedidoService
         _produtoRepository = produtoRepository;
     }
 
-    public async Task<IEnumerable<Pedido>> GetPedidosListAsync(bool? status)
+    public async Task<(IEnumerable<Pedido> Pedidos, int TotalCount)> GetPedidosListAsync(
+        bool? status, int pageNumber, int pageSize)
     {
-        return await _pedidoRepository.GetPedidosListAsync(status);
+        return await _pedidoRepository.GetPedidosListAsync(status, pageNumber, pageSize);
     }
 
     public async Task<Pedido?> GetPedidoByIdAsync(int id)
