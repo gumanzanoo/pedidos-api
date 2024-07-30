@@ -18,7 +18,7 @@ public class ProdutoService : IProdutoService
         return await _produtoRepository.GetProdutosListAsync();
     }
 
-    public async Task<Produto?> GetByIdAsync(int id)
+    public async Task<Produto?> GetProdutoByIdAsync(int id)
     {
         var produto = await _produtoRepository.GetProdutoByIdAsync(id);
         if (produto == null)
@@ -29,17 +29,17 @@ public class ProdutoService : IProdutoService
         return produto;
     }
 
-    public async Task<Produto> CreateAsync(Produto produto)
+    public async Task<Produto> CreateProdutoAsync(Produto produto)
     {
         return await _produtoRepository.AddProdutoAsync(produto);
     }
 
-    public async Task UpdateAsync(Produto produto)
+    public async Task UpdateProdutoAsync(Produto produto)
     {
         await _produtoRepository.UpdateProdutoAsync(produto);
     }
 
-    public async Task DeleteAsync(int id)
+    public async Task DeleteProdutoAsync(int id)
     {
         await _produtoRepository.DeleteProdutoAsync(id);
     }

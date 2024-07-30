@@ -14,9 +14,14 @@ public class PedidoRepository : IPedidoRepository
         _db = db;
     }
 
-    public async Task<IEnumerable<Pedido>> GetPedidosListAsync()
+    public async Task<IEnumerable<Pedido>> GetPedidosListAsync(bool? status)
     {
-        return await _db.Pedidos
+        var queryPedidos = _db.Pedidos.AsQueryable();
+        if (status.HasValue)
+        {
+            queryPedidos = queryPedidos.Where(p => p.Fechado == status);
+        }
+        return await queryPedidos
             .Include(p => p.ItemsPedido)
             .ThenInclude(i => i.Produto)
             .ToListAsync();

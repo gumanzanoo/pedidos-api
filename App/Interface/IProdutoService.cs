@@ -5,8 +5,8 @@ namespace PedidosAPI.App.Interface;
 public interface IProdutoService
 {
     Task<IEnumerable<Produto>> GetProdutosListAsync();
-    Task<Produto?> GetByIdAsync(int id);
-    Task<Produto> CreateAsync(Produto produto);
-    Task UpdateAsync(Produto produto);
-    Task DeleteAsync(int id);
+    Task<Produto?> GetProdutoByIdAsync(int id);
+    Task<Produto> CreateProdutoAsync(Produto produto);
+    Task UpdateProdutoAsync(Produto produto);
+    Task DeleteProdutoAsync(int id);
 }

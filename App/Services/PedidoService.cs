@@ -15,9 +15,9 @@ public class PedidoService : IPedidoService
         _produtoRepository = produtoRepository;
     }
 
-    public async Task<IEnumerable<Pedido>> GetPedidosListAsync()
+    public async Task<IEnumerable<Pedido>> GetPedidosListAsync(bool? status)
     {
-        return await _pedidoRepository.GetPedidosListAsync();
+        return await _pedidoRepository.GetPedidosListAsync(status);
     }
 
     public async Task<Pedido?> GetPedidoByIdAsync(int id)
@@ -30,9 +30,19 @@ public class PedidoService : IPedidoService
         return pedido;
     }
 
-
     public async Task<Pedido> CreatePedidoAsync(Pedido pedido)
     {
+        foreach (var item in pedido.ItemsPedido)
+        {
+            var produto = await _produtoRepository.GetProdutoByIdAsync(item.ProdutoId);
+            if (produto == null)
+            {
+                throw new InvalidOperationException($"O produto de ID {item.ProdutoId} não existe.");
+            }
+
+            item.Produto = produto;
+        }
+        
         return await _pedidoRepository.AddPedidoAsync(pedido);
     }
 
@@ -42,11 +52,11 @@ public class PedidoService : IPedidoService
         var produto = await _produtoRepository.GetProdutoByIdAsync(produtoId);
 
         if (pedido == null)
-            throw new InvalidOperationException("Nenhum pedido encontrado.");
+            throw new InvalidOperationException($"Nenhum pedido com ID {pedidoId} encontrado.");
         if (pedido.Fechado)
             throw new InvalidOperationException("Não é possível adicionar produtos a um pedido fechado.");
         if (produto == null)
-            throw new InvalidOperationException("Nenhum produto encontrado.");
+            throw new InvalidOperationException($"Nenhum produto com ID {produtoId} encontrado.");
 
         var item = new ItemPedido
         {
@@ -67,7 +77,7 @@ public class PedidoService : IPedidoService
         var pedido = await _pedidoRepository.GetPedidoByIdAsync(pedidoId);
 
         if (pedido == null)
-            throw new InvalidOperationException("Nenhum pedido encontrado.");
+            throw new InvalidOperationException($"Nenhum pedido com ID {pedidoId} encontrado.");
         if (pedido.Fechado)
             throw new InvalidOperationException("Não é possível adicionar produtos a um pedido fechado.");
 
@@ -84,7 +94,7 @@ public class PedidoService : IPedidoService
     {
         var pedido = await _pedidoRepository.GetPedidoByIdAsync(pedidoId);
         if (pedido == null)
-            throw new InvalidOperationException("Nenhum pedido encontrado.");
+            throw new InvalidOperationException($"Nenhum pedido com ID {pedidoId} encontrado.");
         if (!pedido.ItemsPedido.Any())
             throw new InvalidOperationException("Não é possível fechar um pedido vazio.");
 

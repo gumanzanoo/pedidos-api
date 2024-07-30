@@ -4,7 +4,7 @@ namespace PedidosAPI.App.Interface;
 
 public interface IPedidoService
 {
-    Task<IEnumerable<Pedido>> GetPedidosListAsync();
+    Task<IEnumerable<Pedido>> GetPedidosListAsync(bool? status);
     Task<Pedido?> GetPedidoByIdAsync(int id);
     Task<Pedido> CreatePedidoAsync(Pedido pedido);
     Task AddProdutoAsync(int pedidoId, int produtoId, int quantidade);
